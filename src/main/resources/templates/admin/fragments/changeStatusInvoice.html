@@ -1,0 +1,86 @@
+<script th:fragment="changeStatusInvoice">
+    function ColorInvoice() {
+        const badgeSpans = document.querySelectorAll('#responsive-data-table .badge');
+        badgeSpans.forEach(function (span) {
+            span.classList.remove(...span.classList);
+            switch (span.textContent) {
+                case 'CHỜ XÁC NHẬN': {
+                    span.classList.add('badge-warning', 'badge');
+                    break;
+                }
+                case 'ĐANG GIAO HÀNG': {
+                    span.classList.add('badge-primary', 'badge');
+                    break;
+                }
+                case 'ĐÃ XÁC NHẬN': {
+                    span.classList.add('badge-info', 'badge');
+                    break;
+                }
+                case 'ĐÃ HỦY': {
+                    span.classList.add('badge-danger', 'badge');
+                    break;
+                }
+                case 'BỊ TỪ CHỐI': {
+                    span.classList.add('badge-secondary', 'badge');
+                    break;
+                }
+            }
+        });
+    }
+    function changeColorInvoice(id) {
+        const badgeSpans = document.getElementById(id);
+            badgeSpans.classList.remove(...badgeSpans.classList);
+            switch (badgeSpans.textContent.trim()) {
+                case 'WAITING': {
+                    badgeSpans.textContent = "CHỜ XÁC NHẬN";
+                    badgeSpans.classList.add('badge-warning', 'badge');
+                    break;
+                }
+                case 'SUCCESS': {
+                    $("tr[name='" + id + "']").remove();
+                    break;
+                }
+                case 'DELIVERY': {
+                    badgeSpans.textContent = "ĐANG GIAO HÀNG";
+                    badgeSpans.classList.add('badge-primary', 'badge');
+                    break;
+                }
+                case 'CONFIRM': {
+                    badgeSpans.textContent = "ĐÃ XÁC NHẬN";
+                    badgeSpans.classList.add('badge-info', 'badge');
+                    break;
+                }
+                case 'CANCEL': {
+                    badgeSpans.textContent = "ĐÃ HỦY";
+                    badgeSpans.classList.add('badge-danger', 'badge');
+                    break;
+                }
+                case 'DENIED': {
+                    badgeSpans.textContent = "BỊ TỪ CHỐI";
+                    badgeSpans.classList.add('badge-secondary', 'badge');
+                    break;
+                }
+            }
+    }
+    window.addEventListener('DOMContentLoaded', ColorInvoice);
+
+    function changeStatusInvoice(status, id) {
+        // Gửi yêu cầu AJAX đến controller
+        $.ajax({
+            type: "GET",
+            url: '/admin/changeStatusInvoice/' + id,
+            data: {status: status},
+            success: function (data) {
+                // Xử lý kết quả nếu cần
+                // $('.badge').html(data.status.toString);
+                $("span[name='" + id + "']").text(data.statusInvoice);
+                changeColorInvoice(id);
+                console.log('Yêu cầu đã được gửi thành công.');
+            },
+            error: function (xhr, status, error) {
+                // Xử lý lỗi nếu có
+                console.error('Đã xảy ra lỗi: ' + error);
+            }
+        });
+    }
+</script>
