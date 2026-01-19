@@ -18,7 +18,7 @@ public class Config {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_ReturnUrl = "https://doan-3-zp39.onrender.com/";
-    public static String vnp_TmnCode = "JOZVTIA6";
+    public static String vnp_TmnCode = "JOZVTIA61";
     public static String secretKey = "IX1MNS90UDQN57FCAUU2TRJEXJWHPCBB";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchantv2/";
 
