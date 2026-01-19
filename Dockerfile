@@ -1,16 +1,18 @@
-FROM maven:3-openjdk-17 AS build
+# Bước 1: Build project bằng Gradle với JDK 21
+FROM gradle:8.5-jdk21 AS build
 WORKDIR /app
-
 COPY . .
-RUN mvn clean package -DskipTests
 
+# Cấp quyền thực thi cho gradlew
+RUN chmod +x gradlew
 
-# Run stage
+# Chạy lệnh build
+RUN ./gradlew bootJar --no-daemon
 
-FROM openjdk:17-jdk-slim
+# Bước 2: Chạy ứng dụng với Java 21 Runtime
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-
-COPY --from=build /app/target/DrComputer-0.0.1-SNAPSHOT.war drcomputer.war
+# Copy file jar từ bước build
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","drcomputer.war"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
